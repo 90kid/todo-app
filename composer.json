@@ -25,6 +25,7 @@
         "phpstan/extension-installer": "^1.2",
         "phpstan/phpstan-symfony": "^1.2",
         "symfony/debug-bundle": "6.1.*",
+        "symfony/maker-bundle": "^1.47",
         "symfony/monolog-bundle": "^3.0",
         "symfony/stopwatch": "6.1.*",
         "symfony/web-profiler-bundle": "6.1.*"
