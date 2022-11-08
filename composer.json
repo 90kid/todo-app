@@ -16,6 +16,7 @@
         "symfony/yaml": "6.1.*"
     },
     "require-dev": {
+        "brainmaestro/composer-git-hooks": "v3.0.0-alpha.1",
         "friendsofphp/php-cs-fixer": "^3.13",
         "phpstan/extension-installer": "^1.2",
         "phpstan/phpstan-symfony": "^1.2",
@@ -81,6 +82,15 @@
         "phpstan": {
             "includes": [
                 "extension.neon"
+            ]
+        },
+        "hooks": {
+            "config": {
+                "stop-on-failure": ["pre-push"]
+            },
+            "pre-push": [
+                "composer php-cs-fixer",
+                "composer phpstan"
             ]
         }
     }
