@@ -16,6 +16,7 @@
         "symfony/yaml": "6.1.*"
     },
     "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.13",
         "symfony/debug-bundle": "6.1.*",
         "symfony/monolog-bundle": "^3.0",
         "symfony/stopwatch": "6.1.*",
@@ -62,7 +63,8 @@
         ],
         "post-update-cmd": [
             "@auto-scripts"
-        ]
+        ],
+        "php-cs-fixer": "vendor/bin/php-cs-fixer fix"
     },
     "conflict": {
         "symfony/symfony": "*"
