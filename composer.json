@@ -63,13 +63,16 @@
             "assets:install %PUBLIC_DIR%": "symfony-cmd"
         },
         "post-install-cmd": [
-            "@auto-scripts"
+            "@auto-scripts",
+            "cghooks add --ignore-lock"
         ],
         "post-update-cmd": [
-            "@auto-scripts"
+            "@auto-scripts",
+            "cghooks update"
         ],
         "php-cs-fixer": "vendor/bin/php-cs-fixer fix",
-        "phpstan": "vendor/bin/phpstan"
+        "phpstan": "vendor/bin/phpstan",
+        "cghooks": "vendor/bin/cghooks"
     },
     "conflict": {
         "symfony/symfony": "*"
