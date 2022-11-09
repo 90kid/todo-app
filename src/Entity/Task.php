@@ -25,11 +25,11 @@ class Task
     private bool $done;
 
     #[ORM\Column(name: 'created_at', type: Types::DATETIME_IMMUTABLE)]
-    #[Gedmo\Timestampable]
+    #[Gedmo\Timestampable(on: 'create')]
     private \DateTimeImmutable $createdAt;
 
     #[ORM\Column(name: 'updated_at', type: Types::DATETIME_IMMUTABLE)]
-    #[Gedmo\Timestampable]
+    #[Gedmo\Timestampable(on: 'update')]
     private \DateTimeImmutable $updatedAt;
 
     public function getId(): int
