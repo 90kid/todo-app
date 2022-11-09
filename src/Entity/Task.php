@@ -23,12 +23,6 @@ class Task
     #[ORM\Column]
     private ?bool $done = null;
 
-    #[ORM\Column]
-    private ?\DateTimeImmutable $created_at = null;
-
-    #[ORM\Column]
-    private ?\DateTimeImmutable $updated_at = null;
-
     public function getId(): ?int
     {
         return $this->id;
@@ -68,15 +62,5 @@ class Task
         $this->done = $done;
 
         return $this;
-    }
-
-    public function getCreatedAt(): ?\DateTimeImmutable
-    {
-        return $this->created_at;
-    }
-
-    public function getUpdatedAt(): ?\DateTimeImmutable
-    {
-        return $this->updated_at;
     }
 }
