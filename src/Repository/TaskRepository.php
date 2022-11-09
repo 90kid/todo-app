@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Task;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -37,6 +38,15 @@ class TaskRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    public function addOrderByCreatedAtQueryBuilder(
+        QueryBuilder $queryBuilder = null,
+        string $direction = 'ASC'
+    ): QueryBuilder {
+        $queryBuilder = $queryBuilder ?? $this->createQueryBuilder('task');
+
+        return $queryBuilder->orderBy('task.createdAt', $direction);
     }
 
 //    /**

@@ -4,21 +4,33 @@ namespace App\Controller;
 
 use App\Entity\Task;
 use App\Repository\TaskRepository;
+use Pagerfanta\Doctrine\ORM\QueryAdapter;
+use Pagerfanta\Pagerfanta;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('api/tasks', name: 'task_')]
 class TaskController extends AbstractController
 {
     #[Route('/', name: 'get_paginated', methods: ['GET'])]
-    public function getPaginatedTasks(): JsonResponse
+    public function getPaginatedTasks(TaskRepository $taskRepository, Request $request): JsonResponse
     {
-        // TODO
-        return $this->json([
-            'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/TaskController.php',
-        ]);
+        // TODO add validation for page, limit, orderBy
+        $currentPage = $request->query->get('page', 1);
+        $maxElementsPerPage = $request->query->get('limit', 10);
+        $orderByDirection = $request->query->get('orderBy', 'ASC');
+
+        $queryBuilder = $taskRepository->addOrderByCreatedAtQueryBuilder(direction: $orderByDirection);
+        $adapter = new QueryAdapter($queryBuilder);
+        $pagerfanta = Pagerfanta::createForCurrentPageWithMaxPerPage(
+            $adapter,
+            $currentPage,
+            $maxElementsPerPage,
+        );
+
+        return $this->json($pagerfanta);
     }
 
     #[Route(
