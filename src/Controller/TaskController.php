@@ -18,8 +18,9 @@ class TaskController extends AbstractController
     public function getPaginatedTasks(TaskRepository $taskRepository, Request $request): JsonResponse
     {
         // TODO add validation for page, limit, orderBy
-        $currentPage = $request->query->get('page', 1);
-        $maxElementsPerPage = $request->query->get('limit', 10);
+        $currentPage = $request->query->getInt('page', 1);
+        $maxElementsPerPage = $request->query->getInt('limit', 10);
+//        dd($currentPage, $maxElementsPerPage);
         $orderByDirection = $request->query->get('orderBy', 'ASC');
 
         $queryBuilder = $taskRepository->addOrderByCreatedAtQueryBuilder(direction: $orderByDirection);
