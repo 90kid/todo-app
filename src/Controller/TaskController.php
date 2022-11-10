@@ -4,31 +4,49 @@ namespace App\Controller;
 
 use App\Entity\Task;
 use App\Repository\TaskRepository;
+use FOS\RestBundle\Controller\Annotations\QueryParam;
+use FOS\RestBundle\Request\ParamFetcherInterface;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('api/tasks', name: 'task_')]
+#[Route('api/tasks', name: 'api_task_')]
 class TaskController extends AbstractController
 {
     #[Route('/', name: 'get_paginated', methods: ['GET'])]
-    public function getPaginatedTasks(TaskRepository $taskRepository, Request $request): JsonResponse
-    {
-        // TODO add validation for page, limit, orderBy
-        $currentPage = $request->query->getInt('page', 1);
-        $maxElementsPerPage = $request->query->getInt('limit', 10);
-//        dd($currentPage, $maxElementsPerPage);
-        $orderByDirection = $request->query->get('orderBy', 'ASC');
-
-        $queryBuilder = $taskRepository->addOrderByCreatedAtQueryBuilder(direction: $orderByDirection);
+    #[QueryParam(
+        name: 'page',
+        requirements: '\d+',
+        default: '1',
+        description: 'Page of the overview.'
+    )]
+    #[QueryParam(
+        name: 'limit',
+        requirements: '\d+',
+        default: '10',
+        description: 'Page of the overview.'
+    )]
+    #[QueryParam(
+        name: 'orderByCreatedAtDirection',
+        requirements: '(?i)asc|desc(?-i)',
+        default: 'asc',
+        description: 'Direction order by createdAt field.'
+    )]
+    public function getPaginatedTasks(
+        TaskRepository $taskRepository,
+        ParamFetcherInterface $paramFetcher
+    ): JsonResponse {
+        $page = $paramFetcher->get('page');
+        $limit = $paramFetcher->get('limit');
+        $orderByCreatedAtDirection = $paramFetcher->get('orderByCreatedAtDirection');
+        $queryBuilder = $taskRepository->addOrderByCreatedAtQueryBuilder(direction: $orderByCreatedAtDirection);
         $adapter = new QueryAdapter($queryBuilder);
         $pagerfanta = Pagerfanta::createForCurrentPageWithMaxPerPage(
             $adapter,
-            $currentPage,
-            $maxElementsPerPage,
+            $page,
+            $limit,
         );
 
         return $this->json($pagerfanta);
