@@ -2,19 +2,28 @@
 
 namespace App\Controller;
 
+use App\Controller\Utils\HasPaginationTrait;
 use App\Entity\Task;
 use App\Repository\TaskRepository;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Request\ParamFetcherInterface;
-use Pagerfanta\Doctrine\ORM\QueryAdapter;
-use Pagerfanta\Pagerfanta;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 #[Route('api/tasks', name: 'api_task_')]
-class TaskController extends AbstractController
+class TaskController extends EntityController
 {
+    use HasPaginationTrait;
+
+    public function __construct(
+        ValidatorInterface $validator,
+        private readonly TaskRepository $taskRepository,
+    ) {
+        parent::__construct($validator);
+    }
+
     #[Route('/', name: 'get_paginated', methods: ['GET'])]
     #[QueryParam(
         name: 'page',
@@ -35,21 +44,17 @@ class TaskController extends AbstractController
         description: 'Direction order by createdAt field.'
     )]
     public function getPaginatedTasks(
-        TaskRepository $taskRepository,
         ParamFetcherInterface $paramFetcher
-    ): JsonResponse {
+    ): Response {
         $page = intval($paramFetcher->get('page'));
         $limit = intval($paramFetcher->get('limit'));
         $orderByCreatedAtDirection = strval($paramFetcher->get('orderByCreatedAtDirection'));
-        $queryBuilder = $taskRepository->addOrderByCreatedAtQueryBuilder(direction: $orderByCreatedAtDirection);
-        $adapter = new QueryAdapter($queryBuilder);
-        $pagerfanta = Pagerfanta::createForCurrentPageWithMaxPerPage(
-            $adapter,
-            $page,
-            $limit,
-        );
+        $queryBuilder = $this->taskRepository->addOrderByCreatedAtQueryBuilder(direction: $orderByCreatedAtDirection);
 
-        return $this->json($pagerfanta);
+        return $this->createAndHandleView(
+            $this->paginate($queryBuilder, $page, $limit),
+            Response::HTTP_OK
+        );
     }
 
     #[Route(
@@ -60,9 +65,9 @@ class TaskController extends AbstractController
         ],
         methods: ['GET']
     )]
-    public function getTask(Task $task): JsonResponse
+    public function getTask(Task $task): Response
     {
-        return $this->json(['data' => $task]);
+        return $this->createAndHandleView($task, Response::HTTP_OK);
     }
 
     #[Route(
@@ -70,16 +75,11 @@ class TaskController extends AbstractController
         name: 'create',
         methods: ['POST']
     )]
-    public function createTask(TaskRepository $taskRepository): JsonResponse
+    public function createTask(Request $request): Response
     {
-        // TODO validation
-        $task = (new Task())
-            ->setName('zadanie1')
-            ->setDescription('opis')
-            ->setDone(false);
-        $taskRepository->save($task, true);
+        $task = $this->setAllTaskProperties(new Task(), $request);
 
-        return $this->json($task);
+        return $this->validateAndReturnResponse($task, $this->taskRepository);
     }
 
     #[Route(
@@ -90,15 +90,11 @@ class TaskController extends AbstractController
         ],
         methods: ['PUT']
     )]
-    public function updateTask(Task $task, TaskRepository $taskRepository): JsonResponse
+    public function updateTask(Task $task, Request $request): Response
     {
-        // TODO validacja
-        $task->setName('zadanie2')
-            ->setDescription('nowy opis')
-            ->setDone(true);
-        $taskRepository->save($task, true);
+        $task = $this->setAllTaskProperties($task, $request);
 
-        return $this->json($task);
+        return $this->validateAndReturnResponse($task, $this->taskRepository);
     }
 
     #[Route(
@@ -109,10 +105,20 @@ class TaskController extends AbstractController
         ],
         methods: ['DELETE']
     )]
-    public function deleteTask(Task $task, TaskRepository $taskRepository): JsonResponse
+    public function deleteTask(Task $task): Response
     {
-        $taskRepository->remove($task, true);
+        $this->taskRepository->remove($task, true);
 
-        return $this->json($task);
+        return $this->createAndHandleView($task, Response::HTTP_OK);
+    }
+
+    private function setAllTaskProperties(Task $task, Request $request): Task
+    {
+        $data = json_decode($request->getContent());
+        $task->setName($data->name ?? null)
+            ->setDescription($data->description ?? null)
+            ->setDone($data->done ?? null);
+
+        return $task;
     }
 }
