@@ -38,9 +38,9 @@ class TaskController extends AbstractController
         TaskRepository $taskRepository,
         ParamFetcherInterface $paramFetcher
     ): JsonResponse {
-        $page = (int) $paramFetcher->get('page');
-        $limit = (int) $paramFetcher->get('limit');
-        $orderByCreatedAtDirection = (string) $paramFetcher->get('orderByCreatedAtDirection');
+        $page = intval($paramFetcher->get('page'));
+        $limit = intval($paramFetcher->get('limit'));
+        $orderByCreatedAtDirection = strval($paramFetcher->get('orderByCreatedAtDirection'));
         $queryBuilder = $taskRepository->addOrderByCreatedAtQueryBuilder(direction: $orderByCreatedAtDirection);
         $adapter = new QueryAdapter($queryBuilder);
         $pagerfanta = Pagerfanta::createForCurrentPageWithMaxPerPage(
