@@ -79,7 +79,7 @@ class TaskController extends EntityController
     {
         $task = $this->setAllTaskProperties(new Task(), $request);
 
-        return $this->validateAndReturnResponse($task, $this->taskRepository);
+        return $this->handleSave($task, $this->taskRepository);
     }
 
     #[Route(
@@ -94,7 +94,7 @@ class TaskController extends EntityController
     {
         $task = $this->setAllTaskProperties($task, $request);
 
-        return $this->validateAndReturnResponse($task, $this->taskRepository);
+        return $this->handleSave($task, $this->taskRepository);
     }
 
     #[Route(

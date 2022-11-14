@@ -17,8 +17,7 @@ class EntityController extends AbstractFOSRestController
     ) {
     }
 
-    // TODO zmienić nazwe bo jest słaba
-    public function validateAndReturnResponse(
+    public function handleSave(
         EntityInterface $entity,
         AbstractEntityRepository $entityRepository
     ): Response {
