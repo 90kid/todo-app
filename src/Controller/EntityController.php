@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Interfaces\EntityInterface;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use App\Repository\AbstractEntityRepository;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,7 +20,7 @@ class EntityController extends AbstractFOSRestController
     // TODO zmienić nazwe bo jest słaba
     public function validateAndReturnResponse(
         EntityInterface $entity,
-        ServiceEntityRepository $entityRepository
+        AbstractEntityRepository $entityRepository
     ): Response {
         $errors = $this->validator->validate($entity);
         if (count($errors) > 0) {

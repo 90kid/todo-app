@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\Task;
+use App\Entity\Interfaces\EntityInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -13,7 +13,7 @@ abstract class AbstractEntityRepository extends ServiceEntityRepository
         parent::__construct($registry, $entityClass);
     }
 
-    public function save(Task $entity, bool $flush = false): void
+    public function save(EntityInterface $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
@@ -22,7 +22,7 @@ abstract class AbstractEntityRepository extends ServiceEntityRepository
         }
     }
 
-    public function remove(Task $entity, bool $flush = false): void
+    public function remove(EntityInterface $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
 

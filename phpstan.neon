@@ -5,3 +5,11 @@ parameters:
 
     # Level 9 is the highest level
     level: 9
+
+    ignoreErrors:
+        -
+            message: '#Class .* has an uninitialized readonly property \$.*\. Assign it in the constructor\.#'
+            paths:
+                - src/Entity
+
+    checkGenericClassInNonGenericObjectType: false

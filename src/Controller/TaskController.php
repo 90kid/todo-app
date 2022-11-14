@@ -114,10 +114,15 @@ class TaskController extends EntityController
 
     private function setAllTaskProperties(Task $task, Request $request): Task
     {
-        $data = json_decode($request->getContent());
-        $task->setName($data->name ?? null)
-            ->setDescription($data->description ?? null)
-            ->setDone($data->done ?? null);
+        /** @var array<string, mixed> $data */
+        $data = json_decode($request->getContent(), true);
+        $name = strval($data['name']);
+        $description = strval($data['description']);
+        $done = is_null($data['done']) ? boolval($data['done']) : null;
+
+        $task->setName($name)
+            ->setDescription($description)
+            ->setDone($done);
 
         return $task;
     }
