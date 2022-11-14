@@ -6,6 +6,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Nelmio\Alice\Loader\SimpleFilesLoader;
 use Nelmio\Alice\ObjectSet;
+use Nelmio\Alice\Throwable\LoadingThrowable;
 
 class AppFixtures extends Fixture
 {
@@ -22,7 +23,12 @@ class AppFixtures extends Fixture
         $this->fixtureDataToDatabaseFromFixtureFiles($manager);
     }
 
-    private function getObjectsSetByFixtureFile(array $fixtureFilesPaths): ObjectSet
+    /**
+     * @param array<string> $fixtureFilesPaths
+     *
+     * @throws LoadingThrowable
+     */
+    private function getObjectsSetByFixtureFiles(array $fixtureFilesPaths): ObjectSet
     {
         return $this->loader->loadFiles($fixtureFilesPaths);
     }
@@ -38,7 +44,7 @@ class AppFixtures extends Fixture
     {
         $this->persistObjectSetToManager(
             $manager,
-            $this->getObjectsSetByFixtureFile(self::FIXTURE_FILES_ARRAY)
+            $this->getObjectsSetByFixtureFiles(self::FIXTURE_FILES_ARRAY)
         );
 
         $manager->flush();
