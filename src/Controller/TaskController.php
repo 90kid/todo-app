@@ -118,7 +118,7 @@ class TaskController extends EntityController
         $data = json_decode($request->getContent(), true);
         $name = strval($data['name']);
         $description = strval($data['description']);
-        $done = is_null($data['done']) ? boolval($data['done']) : null;
+        $done = is_null($data['done']) ? null : boolval($data['done']);
 
         $task->setName($name)
             ->setDescription($description)
