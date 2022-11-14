@@ -1,4 +1,7 @@
 {
+    "babdev/pagerfanta-bundle": {
+        "version": "v3.7.0"
+    },
     "doctrine/annotations": {
         "version": "1.13",
         "recipe": {
@@ -45,6 +48,18 @@
         },
         "files": [
             "./.php-cs-fixer.dist.php"
+        ]
+    },
+    "friendsofsymfony/rest-bundle": {
+        "version": "3.4",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "2.2",
+            "ref": "fa845143b7e0a4c70aedd1a88c549e6d977e9ae5"
+        },
+        "files": [
+            "./config/packages/fos_rest.yaml"
         ]
     },
     "sensio/framework-extra-bundle": {
@@ -183,6 +198,18 @@
         "files": [
             "./config/packages/twig.yaml",
             "./templates/base.html.twig"
+        ]
+    },
+    "symfony/validator": {
+        "version": "6.1",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "5.3",
+            "ref": "c32cfd98f714894c4f128bb99aa2530c1227603c"
+        },
+        "files": [
+            "./config/packages/validator.yaml"
         ]
     },
     "symfony/web-profiler-bundle": {
