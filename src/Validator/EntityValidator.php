@@ -4,7 +4,6 @@ namespace App\Validator;
 
 use App\Entity\Interfaces\EntityInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class EntityValidator
@@ -16,6 +15,5 @@ class EntityValidator
 
     public function validate(EntityInterface $entity, ServiceEntityRepository $entityRepository)
     {
-
     }
 }
