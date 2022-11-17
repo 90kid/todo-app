@@ -63,7 +63,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, EntityI
      */
     public function getUserIdentifier(): string
     {
-        return $this->email;
+        // TODO boże jak mnie to irytuje
+        return $this->email ?? '';
     }
 
     /**
@@ -80,6 +81,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, EntityI
 
     /**
      * @param array<string> $roles
+     *
      * @return $this
      */
     public function setRoles(array $roles): self
@@ -94,7 +96,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, EntityI
      */
     public function getPassword(): string
     {
-        return $this->password;
+        // TODO boże jak mnie to irytuje
+        return $this->password ?? '';
     }
 
     public function setPassword(?string $password): self
@@ -107,7 +110,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, EntityI
     /**
      * @see UserInterface
      */
-    public function eraseCredentials()
+    public function eraseCredentials(): void
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
