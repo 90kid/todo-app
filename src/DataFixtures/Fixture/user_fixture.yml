@@ -1,4 +1,7 @@
+parameters:
+  password: $2y$13$Ew4vaZ8voFl/jbkt5a7kZeBKGQGARZ2SDACL9.GqZXjPPQCHDSyrO
+
 App\Entity\User:
   user{1..10}:
     email (unique): '<email()>'
-    password: 'password'
+    password: '<{password}>'

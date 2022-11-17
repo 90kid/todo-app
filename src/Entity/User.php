@@ -5,10 +5,15 @@ namespace App\Entity;
 use App\Entity\Interfaces\EntityInterface;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Ignore;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Security\Core\Validator\Constraints as SecurityAssert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
+#[UniqueEntity('email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface, EntityInterface
 {
     #[ORM\Id]
@@ -17,15 +22,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, EntityI
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
+    #[Assert\Email]
     private ?string $email = null;
 
-    #[ORM\Column]
+    /**
+     * @var array<string>
+     */
+    #[ORM\Column(type: 'json')]
     private array $roles = [];
 
     /**
-     * @var string The hashed password
+     * @var string|null The hashed password
      */
-    #[ORM\Column]
+    #[ORM\Column(type: 'string')]
+    #[Ignore]
+    #[SecurityAssert\UserPassword]
     private ?string $password = null;
 
     public function getId(): ?int
@@ -36,6 +47,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, EntityI
     public function getEmail(): ?string
     {
         return $this->email;
+    }
+
+    public function setEmail(?string $email): self
+    {
+        $this->email = $email;
+
+        return $this;
     }
 
     /**
@@ -75,7 +93,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, EntityI
         return $this->password;
     }
 
-    public function setPassword(string $password): self
+    public function setPassword(?string $password): self
     {
         $this->password = $password;
 
