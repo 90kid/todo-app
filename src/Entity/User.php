@@ -78,6 +78,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, EntityI
         return array_unique($roles);
     }
 
+    /**
+     * @param array<string> $roles
+     * @return $this
+     */
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
