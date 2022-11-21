@@ -21,33 +21,33 @@ class AuthController extends EntityController
         parent::__construct($validator);
     }
 
-    #[Route(
-        '/login',
-        name: 'login',
-        methods: ['POST'],
-    )]
-    public function login(Request $request): JsonResponse
-    {
-        // TODO
-        return $this->json([
-            'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/AuthController.php',
-        ]);
-    }
-
-    #[Route(
-        '/logout',
-        name: 'logout',
-        methods: ['POST'],
-    )]
-    public function logout(): JsonResponse
-    {
-        // TODO
-        return $this->json([
-            'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/AuthController.php',
-        ]);
-    }
+//    #[Route(
+//        '/login',
+//        name: 'login',
+//        methods: ['POST'],
+//    )]
+//    public function login(Request $request): JsonResponse
+//    {
+//        // TODO
+//        return $this->json([
+//            'message' => 'Welcome to your new controller!',
+//            'path' => 'src/Controller/AuthController.php',
+//        ]);
+//    }
+//
+//    #[Route(
+//        '/logout',
+//        name: 'logout',
+//        methods: ['POST'],
+//    )]
+//    public function logout(): JsonResponse
+//    {
+//        // TODO
+//        return $this->json([
+//            'message' => 'Welcome to your new controller!',
+//            'path' => 'src/Controller/AuthController.php',
+//        ]);
+//    }
 
     #[Route(
         '/register',
