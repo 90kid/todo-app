@@ -11,6 +11,7 @@ use Nelmio\Alice\Throwable\LoadingThrowable;
 class AppFixtures extends Fixture
 {
     private const FIXTURE_FILES_ARRAY = [
+        __DIR__.'/Fixture/user_fixture.yml',
         __DIR__.'/Fixture/task_fixture.yml',
     ];
 
