@@ -7,6 +7,7 @@ use App\Repository\TaskRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: TaskRepository::class)]
@@ -15,32 +16,39 @@ class Task implements EntityInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private readonly ?int $id;
+    #[Groups(['userSerialization', 'taskSerialization'])]
+    private ?int $id;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
     #[Assert\Length(max: 255)]
+    #[Groups(['userSerialization', 'taskSerialization'])]
     private ?string $name;
 
     #[ORM\Column(type: Types::TEXT)]
     #[Assert\NotBlank]
     #[Assert\Length(max: 4294967295)]
+    #[Groups(['userSerialization', 'taskSerialization'])]
     private ?string $description;
 
     #[ORM\Column]
     #[Assert\NotNull]
+    #[Groups(['userSerialization', 'taskSerialization'])]
     private ?bool $done;
 
     #[ORM\Column(name: 'created_at', type: Types::DATETIME_IMMUTABLE)]
     #[Gedmo\Timestampable(on: 'create')]
-    private readonly ?\DateTimeImmutable $createdAt;
+    #[Groups(['userSerialization', 'taskSerialization'])]
+    private ?\DateTimeImmutable $createdAt;
 
     #[ORM\Column(name: 'updated_at', type: Types::DATETIME_IMMUTABLE)]
     #[Gedmo\Timestampable(on: 'update')]
-    private readonly ?\DateTimeImmutable $updatedAt;
+    #[Groups(['userSerialization', 'taskSerialization'])]
+    private ?\DateTimeImmutable $updatedAt;
 
     #[ORM\ManyToOne(inversedBy: 'tasks')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['taskSerialization'])]
     private ?User $user = null;
 
     public function getId(): ?int
