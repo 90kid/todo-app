@@ -1,5 +1,6 @@
 App\Entity\Task:
-  task{1..10}:
+  task{1..100}:
+    user: '@user*'
     name: '<text()>'
     description: '<text()>'
     done: '<boolean()>'
