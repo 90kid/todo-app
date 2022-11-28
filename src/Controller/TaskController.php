@@ -51,7 +51,11 @@ class TaskController extends EntityController
         $page = intval($paramFetcher->get('page'));
         $limit = intval($paramFetcher->get('limit'));
         $orderByCreatedAtDirection = strval($paramFetcher->get('orderByCreatedAtDirection'));
-        $queryBuilder = $this->taskRepository->addOrderByCreatedAtQueryBuilder(direction: $orderByCreatedAtDirection);
+        /** @var User $currentUser */
+        $currentUser = $this->getUser();
+        $queryBuilder = $this
+            ->taskRepository
+            ->userTasksQueryBuilder($currentUser, $orderByCreatedAtDirection);
 
         return $this->createAndHandleView(
             $this->paginate($queryBuilder, $page, $limit),

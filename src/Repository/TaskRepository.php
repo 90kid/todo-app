@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Task;
+use App\Entity\User;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -26,6 +27,16 @@ class TaskRepository extends AbstractEntityRepository
         $queryBuilder = $queryBuilder ?? $this->createQueryBuilder('task');
 
         return $queryBuilder->orderBy('task.createdAt', $direction);
+    }
+
+    public function userTasksQueryBuilder(User $user, string $orderDirection = 'ASC')
+    {
+        $queryBuilder = $this
+            ->createQueryBuilder('task')
+            ->where('task.user = :user_id')
+            ->setParameter('user_id', $user->getId());
+
+        return $this->addOrderByCreatedAtQueryBuilder($queryBuilder, $orderDirection);
     }
 
 //    /**
