@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -19,20 +18,6 @@ class AuthController extends EntityController
         private readonly UserRepository $userRepository,
     ) {
         parent::__construct($validator);
-    }
-
-    #[Route(
-        '/login',
-        name: 'login',
-        methods: ['POST'],
-    )]
-    public function login(Request $request): JsonResponse
-    {
-        // TODO
-        return $this->json([
-            'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/AuthController.php',
-        ]);
     }
 
     #[Route(

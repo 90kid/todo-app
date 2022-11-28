@@ -4,7 +4,9 @@ namespace App\Controller;
 
 use App\Controller\Utils\HasPaginationTrait;
 use App\Entity\Task;
+use App\Entity\User;
 use App\Repository\TaskRepository;
+use FOS\RestBundle\Context\Context;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Request\ParamFetcherInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -53,7 +55,8 @@ class TaskController extends EntityController
 
         return $this->createAndHandleView(
             $this->paginate($queryBuilder, $page, $limit),
-            Response::HTTP_OK
+            Response::HTTP_OK,
+            $this->getTaskViewContext(['taskSerialization'])
         );
     }
 
@@ -67,7 +70,11 @@ class TaskController extends EntityController
     )]
     public function getTask(Task $task): Response
     {
-        return $this->createAndHandleView($task, Response::HTTP_OK);
+        return $this->createAndHandleView(
+            $task,
+            Response::HTTP_OK,
+            $this->getTaskViewContext(['taskSerialization'])
+        );
     }
 
     #[Route(
@@ -79,7 +86,11 @@ class TaskController extends EntityController
     {
         $task = $this->setAllTaskProperties(new Task(), $request);
 
-        return $this->handleSave($task, $this->taskRepository);
+        return $this->handleSave(
+            $task,
+            $this->taskRepository,
+            $this->getTaskViewContext(['taskSerialization'])
+        );
     }
 
     #[Route(
@@ -94,7 +105,11 @@ class TaskController extends EntityController
     {
         $task = $this->setAllTaskProperties($task, $request);
 
-        return $this->handleSave($task, $this->taskRepository);
+        return $this->handleSave(
+            $task,
+            $this->taskRepository,
+            $this->getTaskViewContext(['taskSerialization'])
+        );
     }
 
     #[Route(
@@ -109,21 +124,37 @@ class TaskController extends EntityController
     {
         $this->taskRepository->remove($task, true);
 
-        return $this->createAndHandleView($task, Response::HTTP_OK);
+        return $this->createAndHandleView(
+            $task,
+            Response::HTTP_OK,
+            $this->getTaskViewContext(['taskSerialization'])
+        );
     }
 
     private function setAllTaskProperties(Task $task, Request $request): Task
     {
         /** @var array<string, mixed> $data */
         $data = json_decode($request->getContent(), true);
-        $name = strval($data['name']);
-        $description = strval($data['description']);
-        $done = is_null($data['done']) ? null : boolval($data['done']);
-
+        $name = strval($data['name'] ?? '');
+        $description = strval($data['description'] ?? '');
+        $done = $data['done'] ?? null;
+        $done = is_null($done) ? null : boolval($data['done']);
+        /** @var User $currentAuthUser */
+        $currentAuthUser = $this->getUser();
         $task->setName($name)
             ->setDescription($description)
-            ->setDone($done);
+            ->setDone($done)
+            ->setUser($currentAuthUser);
 
         return $task;
+    }
+
+    /**
+     * @param array<string> $groups
+     */
+    private function getTaskViewContext(array $groups): Context
+    {
+        return (new Context())
+            ->setGroups($groups);
     }
 }

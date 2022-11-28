@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\Ignore;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -20,16 +21,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, EntityI
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['userSerialization', 'taskSerialization'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
     #[Assert\Email]
+    #[Groups(['userSerialization', 'taskSerialization'])]
     private ?string $email = null;
 
     /**
      * @var array<string>
      */
     #[ORM\Column(type: 'json')]
+    #[Groups(['userSerialization', 'taskSerialization'])]
     private array $roles = [];
 
     /**
@@ -37,9 +41,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, EntityI
      */
     #[ORM\Column(type: 'string')]
     #[Ignore]
+    #[Groups(['userSerialization', 'taskSerialization'])]
     private ?string $password = null;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Task::class, orphanRemoval: true)]
+    #[Groups(['userSerialization'])]
     private Collection $tasks;
 
     public function __construct()
