@@ -29,7 +29,7 @@ class TaskRepository extends AbstractEntityRepository
         return $queryBuilder->orderBy('task.createdAt', $direction);
     }
 
-    public function userTasksQueryBuilder(User $user, string $orderDirection = 'ASC')
+    public function userTasksQueryBuilder(User $user, string $orderDirection = 'ASC'): QueryBuilder
     {
         $queryBuilder = $this
             ->createQueryBuilder('task')
