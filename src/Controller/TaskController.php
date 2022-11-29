@@ -6,6 +6,7 @@ use App\Controller\Utils\HasPaginationTrait;
 use App\Entity\Task;
 use App\Entity\User;
 use App\Repository\TaskRepository;
+use App\Security\Voter\TaskVoter;
 use FOS\RestBundle\Context\Context;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Request\ParamFetcherInterface;
@@ -74,6 +75,8 @@ class TaskController extends EntityController
     )]
     public function getTask(Task $task): Response
     {
+        $this->denyAccessUnlessGranted(TaskVoter::VIEW, $task);
+
         return $this->createAndHandleView(
             $task,
             Response::HTTP_OK,
@@ -107,6 +110,7 @@ class TaskController extends EntityController
     )]
     public function updateTask(Task $task, Request $request): Response
     {
+        $this->denyAccessUnlessGranted(TaskVoter::EDIT, $task);
         $task = $this->setAllTaskProperties($task, $request);
 
         return $this->handleSave(
@@ -126,6 +130,7 @@ class TaskController extends EntityController
     )]
     public function deleteTask(Task $task): Response
     {
+        $this->denyAccessUnlessGranted(TaskVoter::DELETE, $task);
         $this->taskRepository->remove($task, true);
 
         return $this->createAndHandleView(
