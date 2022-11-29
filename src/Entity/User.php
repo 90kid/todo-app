@@ -6,6 +6,8 @@ use App\Entity\Interfaces\EntityInterface;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -43,6 +45,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, EntityI
     #[Ignore]
     #[Groups(['userSerialization', 'taskSerialization'])]
     private ?string $password = null;
+
+    #[ORM\Column(name: 'created_at', type: Types::DATETIME_IMMUTABLE)]
+    #[Gedmo\Timestampable(on: 'create')]
+    #[Groups(['userSerialization', 'taskSerialization'])]
+    private ?\DateTimeImmutable $createdAt;
+
+    #[ORM\Column(name: 'updated_at', type: Types::DATETIME_IMMUTABLE)]
+    #[Gedmo\Timestampable(on: 'update')]
+    #[Groups(['userSerialization', 'taskSerialization'])]
+    private ?\DateTimeImmutable $updatedAt;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Task::class, orphanRemoval: true)]
     #[Groups(['userSerialization'])]
