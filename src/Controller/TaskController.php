@@ -76,6 +76,7 @@ class TaskController extends EntityController
     public function getTask(Task $task): Response
     {
         $this->denyAccessUnlessGranted(TaskVoter::VIEW, $task);
+
         return $this->createAndHandleView(
             $task,
             Response::HTTP_OK,
