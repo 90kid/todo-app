@@ -6,4 +6,7 @@ parameters:
     # Level 9 is the highest level
     level: 9
 
+    ignoreErrors:
+        - '#^Access to an undefined property Symfony\\Component\\Validator\\Constraint::\$message\.$#'
+
     checkGenericClassInNonGenericObjectType: false
