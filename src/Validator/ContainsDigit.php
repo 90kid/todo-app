@@ -18,7 +18,7 @@ class ContainsDigit extends Constraint
      * Any public properties become valid options for the annotation.
      * Then, use these in your validator class.
      */
-    public $message = 'The value "{{ value }}" must contains digit.';
+    public string $message = 'The value "{{ value }}" must contains digit.';
 
     #[HasNamedArguments]
     public function __construct(bool $isPasswordValidation = false, array $groups = null, mixed $payload = null)

@@ -11,7 +11,7 @@ class ContainsDigitValidator extends ConstraintValidator
 {
     public const CONTAINS_DIGIT_REGEX = '/\d/';
 
-    public function validate($value, Constraint $constraint)
+    public function validate(mixed $value, Constraint $constraint): void
     {
         /* @var ContainsDigit $constraint */
 
@@ -29,7 +29,7 @@ class ContainsDigitValidator extends ConstraintValidator
         $this->checkIfContainDigit($value, $constraint);
     }
 
-    protected function checkIfContainDigit($value, Constraint $constraint)
+    protected function checkIfContainDigit(string $value, Constraint $constraint): void
     {
         if (!preg_match(self::CONTAINS_DIGIT_REGEX, $value)) {
             $this->context->buildViolation($constraint->message)

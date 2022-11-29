@@ -11,7 +11,7 @@ class MixedCaseValidator extends ConstraintValidator
 {
     public const MIXED_CASE_REGEX = '/(?=.*[A-Z])(?=.*[a-z])/';
 
-    public function validate($value, Constraint $constraint)
+    public function validate(mixed $value, Constraint $constraint): void
     {
         /* @var MixedCase $constraint */
 
@@ -29,7 +29,7 @@ class MixedCaseValidator extends ConstraintValidator
         $this->checkIfContainMixedCase($value, $constraint);
     }
 
-    protected function checkIfContainMixedCase($value, Constraint $constraint)
+    protected function checkIfContainMixedCase(string $value, Constraint $constraint): void
     {
         if (!preg_match(self::MIXED_CASE_REGEX, $value)) {
             $this->context->buildViolation($constraint->message)

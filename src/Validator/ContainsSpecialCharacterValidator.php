@@ -11,7 +11,7 @@ class ContainsSpecialCharacterValidator extends ConstraintValidator
 {
     public const CONTAINS_SPECIAL_CHARACTER_REGEX = '/[!@#$%^&*()_+\-=\[\]{};\':"\\\\|,.<>\/?`~]/';
 
-    public function validate($value, Constraint $constraint)
+    public function validate(mixed $value, Constraint $constraint): void
     {
         /* @var ContainsSpecialCharacter $constraint */
 
@@ -29,7 +29,7 @@ class ContainsSpecialCharacterValidator extends ConstraintValidator
         $this->checkIfContainSpecialCharacter($value, $constraint);
     }
 
-    protected function checkIfContainSpecialCharacter($value, Constraint $constraint)
+    protected function checkIfContainSpecialCharacter(string $value, Constraint $constraint): void
     {
         if (!preg_match(self::CONTAINS_SPECIAL_CHARACTER_REGEX, $value)) {
             $this->context->buildViolation($constraint->message)
